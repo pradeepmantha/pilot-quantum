@@ -4,7 +4,7 @@ import sys
 
 import pennylane as qml
 
-from pilot.pilot_compute_service import PilotComputeService
+from pilot.pcs import PilotComputeService
 
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -12,19 +12,15 @@ RESOURCE_URL_HPC = "ssh://localhost"
 WORKING_DIRECTORY = os.path.join(os.environ["HOME"], "work")
 
 pilot_compute_description_dask = {
-    "resource": "ssh://prmantha@perlmutter",
-    "working_directory": "/pscratch/sd/p/prmantha/work",
+    "resource": RESOURCE_URL_HPC,
+    "working_directory": os.path.join(os.path.expanduser("~"), "work"),
     "type": "dask"
 }
-
-
 def start_pilot():
     pcs = PilotComputeService()
     dp = pcs.create_pilot(pilot_compute_description=pilot_compute_description_dask)
     dp.wait()
     return dp
-
-
 def square(a):
     return a * a
 
